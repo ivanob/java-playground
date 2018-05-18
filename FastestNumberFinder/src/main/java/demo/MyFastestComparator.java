@@ -8,6 +8,8 @@ import org.json.simple.parser.ParseException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +36,25 @@ public class MyFastestComparator implements NumberFinder{
         return result.getResult();
     }
 
+    private CustomNumberEntity buildCustomNumberEntity(String n){
+        final Constructor<CustomNumberEntity> constructor;
+        CustomNumberEntity cne = null;
+        try {
+            constructor = CustomNumberEntity.class.getDeclaredConstructor(String.class);
+            constructor.setAccessible(true);
+            cne = constructor.newInstance(n);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return cne;
+    }
+
     public List<CustomNumberEntity> readFromFile(String filePath) {
         JSONParser parser = new JSONParser();
         List<CustomNumberEntity> list = new ArrayList<CustomNumberEntity>();
@@ -43,8 +64,7 @@ public class MyFastestComparator implements NumberFinder{
             Iterator<JSONObject> iterator = jsonArray.iterator();
             while (iterator.hasNext()) {
                 JSONObject jsonNumber = (JSONObject)iterator.next();
-                CustomNumberEntity n = new CustomNumberEntity();
-                n.setNumber((String)jsonNumber.get("number"));
+                CustomNumberEntity n =buildCustomNumberEntity((String)jsonNumber.get("number"));
                 list.add(n);
             }
         }catch (FileNotFoundException e) {
