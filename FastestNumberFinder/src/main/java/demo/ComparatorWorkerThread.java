@@ -1,11 +1,14 @@
 package demo;
 import demo.MyFastestComparator.SharedResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ComparatorWorkerThread implements Runnable{
     private int value1;
     private CustomNumberEntity value2;
     private SharedResult result;
     private FastestComparator comparator;
+    private static Logger LOGGER = LoggerFactory.getLogger(ComparatorWorkerThread.class);
 
     public ComparatorWorkerThread(int value1, CustomNumberEntity value2, SharedResult result){
         this.value1 = value1;
@@ -15,6 +18,7 @@ public class ComparatorWorkerThread implements Runnable{
     }
 
     public void run() {
+        LOGGER.info("ComparatorWorker initialized: Values " + value1 + " & " + value2 + " will be compared");
         if(comparator.compare(value1, value2) == 0){
             result.setResultTrue();
         }else{

@@ -17,7 +17,7 @@ public final class FastestComparator {
 	 */
 	public int compare(int firstValue, CustomNumberEntity secondValue){
 		Random random = new Random();
-		int mSeconds = (random.nextInt(6)+5)*1000; //milliseconds 
+		int mSeconds = (random.nextInt(6)+5)*1000; //milliseconds
 		int secondValueAsNumber = Integer.parseInt(secondValue.getNumber());
 		try {
 			Thread.sleep(mSeconds);

@@ -64,8 +64,14 @@ public class MyFastestComparator implements NumberFinder{
             Iterator<JSONObject> iterator = jsonArray.iterator();
             while (iterator.hasNext()) {
                 JSONObject jsonNumber = (JSONObject)iterator.next();
-                CustomNumberEntity n =buildCustomNumberEntity((String)jsonNumber.get("number"));
-                list.add(n);
+                String str = (String)jsonNumber.get("number");
+                try {
+                    Integer.parseInt(str);
+                    CustomNumberEntity n = buildCustomNumberEntity(str);
+                    list.add(n);
+                }catch(NumberFormatException e){
+                    //In this case, the data read from the file is not numeric
+                }
             }
         }catch (FileNotFoundException e) {
             e.printStackTrace();
