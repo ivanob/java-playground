@@ -68,7 +68,7 @@ public class MyFastestComparator implements NumberFinder{
         return result.getResult();
     }
 
-    private CustomNumberEntity buildCustomNumberEntity(String n){
+    protected CustomNumberEntity buildCustomNumberEntity(String n){
         final Constructor<CustomNumberEntity> constructor;
         CustomNumberEntity cne = null;
         try {
