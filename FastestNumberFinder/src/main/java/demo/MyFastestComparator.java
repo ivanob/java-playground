@@ -18,20 +18,41 @@ public class MyFastestComparator implements NumberFinder{
 
     public class SharedResult{
         private boolean found;
-        public SharedResult(){ found=false; }
+        public SharedResult(){
+            found=false;
+            finishAllThreads();
+        }
         public void setResultTrue(){
             this.found = true;
+
         }
         public boolean getResult(){
             return found;
         }
     }
 
+    private List<Thread> listThreads = new ArrayList<Thread>();
+    public void finishAllThreads(){
+        for(Thread t : listThreads){
+            t.stop();
+        }
+    }
+
     public boolean contains(int valueToFind, List<CustomNumberEntity> list) {
         SharedResult result = new SharedResult();
-        for(CustomNumberEntity number : list){
+        for (CustomNumberEntity number : list) {
             Runnable r = new ComparatorWorkerThread(valueToFind, number, result);
-            r.run();
+            Thread thread = new Thread(null, r, "Background");
+            listThreads.add(thread);
+            thread.start();
+        }
+        //Wait for all threads to finish
+        for (int i = 0; i < listThreads.size(); i++){
+            try {
+                listThreads.get(i).join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         return result.getResult();
     }

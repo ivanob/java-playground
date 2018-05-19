@@ -19,10 +19,13 @@ public class ComparatorWorkerThread implements Runnable{
 
     public void run() {
         LOGGER.info("ComparatorWorker initialized: Values " + value1 + " & " + value2 + " will be compared");
+        String comparatorStr = "";
         if(comparator.compare(value1, value2) == 0){
             result.setResultTrue();
+            comparatorStr = "==";
         }else{
-
+            comparatorStr = "!=";
         }
+        LOGGER.info("ComparatorWorker finished: Result " + value1 + comparatorStr + value2);
     }
 }
