@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args){
-        System.out.println("Started application");
+        System.out.println("Application started");
         MyFastestComparator fastestComparator = new MyFastestComparator();
         List<CustomNumberEntity> l = fastestComparator.readFromFile("src/main/resources/list1.json");
         int numberToFind = 100;

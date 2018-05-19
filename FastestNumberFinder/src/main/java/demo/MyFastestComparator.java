@@ -41,7 +41,7 @@ public class MyFastestComparator implements NumberFinder{
      * takes from 5 to 10 seconds, in the best case if we found it in second 5 there is no need
      * to wait 10 seconds for all threads to finish, we can terminate the application.
      */
-    public void finishAllThreads(){
+    private void finishAllThreads(){
         LOGGER.info("The number has been found in the list !!");
         for(Thread t : listThreads){
             t.interrupt();
