@@ -4,6 +4,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -20,10 +22,10 @@ public class MyFastestComparator implements NumberFinder{
         private boolean found;
         public SharedResult(){
             found=false;
-            finishAllThreads();
         }
         public void setResultTrue(){
             this.found = true;
+            finishAllThreads();
 
         }
         public boolean getResult(){
@@ -32,14 +34,23 @@ public class MyFastestComparator implements NumberFinder{
     }
 
     private List<Thread> listThreads = new ArrayList<Thread>();
+    private static Logger LOGGER = LoggerFactory.getLogger(MyFastestComparator.class);
+
+    /**
+     * Once the number has been found, there is no need to keep searching. As every comparation
+     * takes from 5 to 10 seconds, in the best case if we found it in second 5 there is no need
+     * to wait 10 seconds for all threads to finish, we can terminate the application.
+     */
     public void finishAllThreads(){
+        LOGGER.info("The number has been found in the list !!");
         for(Thread t : listThreads){
-            t.stop();
+            t.interrupt();
         }
     }
 
     public boolean contains(int valueToFind, List<CustomNumberEntity> list) {
         SharedResult result = new SharedResult();
+        //Launch all threads, one per comparation
         for (CustomNumberEntity number : list) {
             Runnable r = new ComparatorWorkerThread(valueToFind, number, result);
             Thread thread = new Thread(null, r, "Background");
